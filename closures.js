@@ -16,12 +16,16 @@ another variable called 'inner'. */
 
 // Code Here
 
+inner = outer();
+
 //Once you do that, invoke inner.
+
+
 
 //Code Here
 
 
-
+inner();
 
 
 
@@ -48,12 +52,9 @@ in your console. */
 
   //Code Here
 
-
-
-
-
-
-
+var callJake = callFriend("Jake")
+  callJake('435-555-9248');
+  
 
 
 /******************************************************************************\
@@ -66,20 +67,19 @@ properly. */
 
 //Code Here
 
+function makeCounter(){
+  var count = 1;
+  return function(){
+    return count++;
+  }
+}
+
 //Uncomment this once you make your function
-//   var count = makeCounter();
-//   count(); // 1
-//   count(); // 2
-//   count(); // 3
-//   count(); // 4
-
-
-
-
-
-
-
-
+  var count = makeCounter();
+  count(); // 1
+  count(); // 2
+  count(); // 3
+  count(); // 4
 
 
 /******************************************************************************\
@@ -100,23 +100,23 @@ function counterFactory(value) {
 
   // Code here.
 
-
+  var count = value;
   return {
+    inc: function() {
+      return ++count;
+    },
+  dec: function(){
+    return --count;
+  }
+  
   }
 }
 
-
 counter = counterFactory(10);
-// counter.inc() // 11
-// counter.inc() // 12
-// counter.inc() // 13
-// counter.dec() // 12
-
-
-
-
-
-
+counter.inc() // 11
+counter.inc() // 12
+counter.inc() // 13
+counter.dec() // 12
 
 
 
@@ -132,7 +132,12 @@ will return 'You're doing awesome, keep it up firstname lastname.' */
 function motivation(firstname, lastname) {
 
   var welcomeText = 'You\'re doing awesome, keep it up ';
+  
+  var message = function(){
+return welcomeText + firstname + " " + lastname + ".";
+  }
 
+return message();
   // code message function here.
 
 
@@ -142,13 +147,6 @@ function motivation(firstname, lastname) {
 }
 
 motivation('Billy', 'Bob'); // 'You're doing awesome keep it up Billy Bob.
-
-
-
-
-
-
-
 
 
 
@@ -174,11 +172,19 @@ var module = (function() {
 
   // Anything that is being returned is made public and can be invoked from
   // outside our lexical scope
-  return {
+ 
+ return {
+publicMethod: function(){
+  return privateMethod()
+   
+    }
     // Code here.
   };
 
 })();
+
+module.publicMethod();
+
 
 
 
@@ -195,7 +201,18 @@ var secondLevelFriends = ["Anne", "Harry", "Quinton"];
 var allUsers = ["Tom", "Dick", "Harry", "Anne", "Quinton", "Katie", "Mary"];
 
 function findPotentialFriends(existingFriends) {
+return function(user){
+  for(var i = 0; i < existingFriends.length; i++){
+    if(user === existingFriends[i]){
+return false;
 
+} 
+
+}
+
+return true;
+
+  }  
 }
 
 var isNotAFriend = findPotentialFriends( friends );
@@ -210,8 +227,9 @@ var isNotAFriend = findPotentialFriends( friends );
 method, find all potential second level friends as well as potential friends
 from allUsers. */
 
-var potentialSecondLevelFriends = "?";
-var allPotentialFriends = "?";
+
+var potentialSecondLevelFriends = secondLevelFriends.filter(isNotAFriend);
+var allPotentialFriends = allUsers.filter(isNotAFriend);
 
 
 /******************************************************************************\
@@ -234,11 +252,16 @@ to 5. What we need to do is console.log(i) so that it logs like so:
  Fix the code below to log the desired output.
  */
 
+var closure = function(i) {
+  return function() {
+    console.log(i);
+  }
+}
+
 function timeOutCounter() {
   for (var i = 0; i <= 5; i++) {
-    setTimeout(function() {
-    	console.log(i)
-	}, i * 1000)
+    setTimeout(closure(i), i * 1000)
   }
 }
 timeOutCounter();
+
